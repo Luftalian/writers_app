@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 
 	"github.com/Luftalian/writers_app/domain"
@@ -28,13 +30,12 @@ func (repo *UserRepository) FindByID(id uuid.UUID) (domain.User, error) {
 	return users[0], nil
 }
 
-func (repo *UserRepository) Store(user domain.User) error {
+func (repo *UserRepository) Store(user domain.User) (domain.User, error) {
+	user.UserID = uuid.New()
+	user.CreatedAt = time.Now()
 	_, err := repo.Exec("INSERT INTO users (user_id, name, created_at) VALUES (?, ?, ?)", user.UserID, user.Name, user.CreatedAt)
 	if err != nil {
-		return err
+		return domain.User{}, err
 	}
-	if err != nil {
-		return err
-	}
-	return nil
+	return user, nil
 }

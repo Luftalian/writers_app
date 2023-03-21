@@ -32,7 +32,11 @@ func (handler *DbHandler) Select(dest interface{}, query string, args ...interfa
 }
 
 func (handler *DbHandler) Exec(query string, args ...interface{}) (database.Result, error) {
-	return handler.Conn.Exec(query, args...)
+	result, err := handler.Conn.Exec(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	return DbResult{result}, nil
 }
 
 type DbResult struct {

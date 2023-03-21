@@ -26,13 +26,20 @@ func NewUserController(handler database.DbHandler) *UserController {
 
 func (controller *UserController) Create(c Context) {
 	u := domain.User{}
-	c.Bind(&u)
-	err := controller.Interactor.Add(u)
+	if err := c.Bind(&u); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	if u.UserID != uuid.Nil && u.CreatedAt != nil {
+		c.JSON(http.StatusBadRequest, "UserID must be empty")
+		return
+	}
+	user, err := controller.Interactor.Add(u)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusCreated, u)
+	c.JSON(http.StatusCreated, user)
 }
 
 func (controller *UserController) Index(c Context) {

@@ -7,6 +7,11 @@
 -- Server version: 10.6.4-MariaDB-1:10.6.4+maria~focal
 -- PHP Version: 8.0.19
 
+
+CREATE DATABASE `WRAPP` DEFAULT CHARACTER SET utf8mb4;
+
+USE `WRAPP`;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -31,6 +36,31 @@ CREATE TABLE `users` (
   `user_id` char(36) DEFAULT NULL,
   `name` varchar(300) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `texts`
+--
+
+CREATE TABLE `texts` (
+  `text_id` char(36) DEFAULT NULL,
+  `title` varchar(300) DEFAULT NULL,
+  `content` varchar(300) DEFAULT NULL,
+  `user_name` varchar(300) DEFAULT NULL,
+  `user_id` char(36) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `changed_at` timestamp NULL DEFAULT NULL,
+  `good_count` int(11) UNSIGNED NOT NULL,
+  `bad_count` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `tag_id` char(36) DEFAULT NULL,
+  `tag_name` varchar(300) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

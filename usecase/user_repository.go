@@ -7,7 +7,7 @@ import (
 )
 
 type UserRepository interface {
-	Store(user domain.User) error
+	Store(user domain.User) (domain.User, error)
 	FindAll() (domain.Users, error)
 	FindByID(id uuid.UUID) (domain.User, error)
 }

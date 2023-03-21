@@ -10,12 +10,12 @@ type UserInteractor struct {
 	UserRepository UserRepository
 }
 
-func (interactor *UserInteractor) Add(u domain.User) error {
-	err := interactor.UserRepository.Store(u)
+func (interactor *UserInteractor) Add(u domain.User) (domain.User, error) {
+	user, err := interactor.UserRepository.Store(u)
 	if err != nil {
-		return err
+		return domain.User{}, err
 	}
-	return nil
+	return user, nil
 }
 
 func (interactor *UserInteractor) Users() (domain.Users, error) {
