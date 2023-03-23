@@ -64,6 +64,34 @@ CREATE TABLE `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Table structure for table `userCreates`
+--
+
+CREATE TABLE `userCreates` (
+  `user_id` char(36) DEFAULT NULL,
+  `text_id` char(36) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `userLikes`
+--
+
+CREATE TABLE `userLikes` (
+  `user_id` char(36) DEFAULT NULL,
+  `text_id` char(36) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `tagLists`
+--
+
+CREATE TABLE `tagLists` (
+  `tag_id` char(36) DEFAULT NULL,
+  `name` varchar(300) DEFAULT NULL,
+  `text_id` char(36) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Dumping data for table `users`
 --
 
