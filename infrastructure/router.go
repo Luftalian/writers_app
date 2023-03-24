@@ -114,6 +114,10 @@ func init() {
 		userLikeController.Index(c)
 		return nil
 	})
+	e.POST("/like/check", func(c echo.Context) error {
+		userLikeController.Check(c)
+        return nil
+    })
 	e.GET("/like/user/:id", func(c echo.Context) error {
 		userLikeController.ShowByUserID(c)
 		return nil

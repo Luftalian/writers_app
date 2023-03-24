@@ -26,12 +26,20 @@ func (interactor *UserLikeInteractor) UserLikes() (domain.UserLikes, error) {
 	return userLikes, nil
 }
 
-func (interactor *UserLikeInteractor) UserLikeByUserID(userID uuid.UUID) (domain.UserLike, error) {
-	userLike, err := interactor.UserLikeRepository.FindByUserID(userID)
+func (interactor *UserLikeInteractor) CheckLike(u domain.UserLike) (bool, error) {
+	check, err := interactor.UserLikeRepository.CheckLikeUser(u)
+	if err!= nil {
+        return check, err
+    }
+	return check, nil
+}
+
+func (interactor *UserLikeInteractor) UserLikeByUserID(userID uuid.UUID) (domain.Texts, error) {
+	texts, err := interactor.UserLikeRepository.FindByUserID(userID)
 	if err != nil {
-		return domain.UserLike{}, err
+		return nil, err
 	}
-	return userLike, nil
+	return texts, nil
 }
 
 func (interactor *UserLikeInteractor) UserLikeByTextID(textID uuid.UUID) (domain.UserLike, error) {

@@ -9,7 +9,7 @@ import (
 type UserCreateRepository interface {
 	Store(userCreate domain.UserCreate) (domain.UserCreate, error)
 	FindAll() (domain.UserCreates, error)
-	FindByUserID(userID uuid.UUID) (domain.UserCreate, error)
+	FindByUserID(userID uuid.UUID) (domain.Texts, error)
 	FindByTextID(textID uuid.UUID) (domain.UserCreate, error)
 	Update(userCreate domain.UserCreate) error
 	Delete(u domain.UserCreate) error

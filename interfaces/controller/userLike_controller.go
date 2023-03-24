@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -51,6 +52,30 @@ func (controller *UserLikeController) Index(c Context) {
 	}
 	log.Printf("Got user likes: %v", userLikes)
 	c.JSON(http.StatusOK, userLikes)
+}
+
+func (controller *UserLikeController) Check(c Context) {
+	ul := domain.UserLike{}
+	if err := c.Bind(&ul); err != nil {
+		log.Printf("Error while binding user like: %v", err)
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	checkStruct := domain.Check{}
+	check, err := controller.Interactor.CheckLike(ul)
+	checkStruct.Check = check
+	if err == sql.ErrNoRows {
+		log.Printf("UserLike already exists")
+		c.JSON(http.StatusOK, checkStruct)
+		return
+	}
+    if err != nil {
+        log.Printf("Error while getting user likes: %v", err)
+        c.JSON(http.StatusInternalServerError, err)
+        return
+    }
+    log.Printf("Got user likes: %v", checkStruct)
+    c.JSON(http.StatusOK, checkStruct)
 }
 
 func (controller *UserLikeController) ShowByUserID(c Context) {

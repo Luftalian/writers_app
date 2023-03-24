@@ -28,13 +28,13 @@ func (repo *TagListRepository) Store(tagList domain.TagList) (domain.TagList, er
 	return tagList, nil
 }
 
-func (repo *TagListRepository) FindByTextID(textID uuid.UUID) (domain.TagList, error) {
-	tagList := domain.TagList{}
-	err := repo.Select(&tagList, "SELECT * FROM tagLists WHERE text_id = ?", textID)
+func (repo *TagListRepository) FindByTextID(textID uuid.UUID) (domain.TagLists, error) {
+	tagLists := domain.TagLists{}
+	err := repo.Select(&tagLists, "SELECT * FROM tagLists WHERE text_id = ?", textID)
 	if err != nil {
-		return domain.TagList{}, err
+		return nil, err
 	}
-	return tagList, nil
+	return tagLists, nil
 }
 
 func (repo *TagListRepository) FindByTagID(tagID uuid.UUID) (domain.TagLists, error) {

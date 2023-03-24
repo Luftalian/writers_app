@@ -19,13 +19,13 @@ func (repo *UserCreateRepository) FindAll() (domain.UserCreates, error) {
 	return userCreates, nil
 }
 
-func (repo *UserCreateRepository) FindByUserID(userID uuid.UUID) (domain.UserCreate, error) {
-	userCreates := domain.UserCreates{}
-	err := repo.Select(&userCreates, "SELECT * FROM userCreates WHERE user_id = ?", userID)
+func (repo *UserCreateRepository) FindByUserID(userID uuid.UUID) (domain.Texts, error) {
+	texts := domain.Texts{}
+	err := repo.Select(&texts, "SELECT texts.text_id, texts.title, texts.content, texts.user_name, texts.user_id, texts.created_at, texts.changed_at, texts.good_count, texts.bad_count FROM userCreates INNER JOIN texts ON userCreates.text_id = texts.text_id WHERE userCreates.user_id = ?", userID)
 	if err != nil {
-		return domain.UserCreate{}, err
+		return nil, err
 	}
-	return userCreates[0], nil
+	return texts, nil
 }
 
 func (repo *UserCreateRepository) FindByTextID(textID uuid.UUID) (domain.UserCreate, error) {

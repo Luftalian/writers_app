@@ -26,12 +26,12 @@ func (interactor *TagListInteractor) TagLists() (domain.TagLists, error) {
 	return tags, nil
 }
 
-func (interactor *TagListInteractor) TagListByTextID(id uuid.UUID) (domain.TagList, error) {
-	tag, err := interactor.TagListRepository.FindByTextID(id)
+func (interactor *TagListInteractor) TagListByTextID(id uuid.UUID) (domain.TagLists, error) {
+	tags, err := interactor.TagListRepository.FindByTextID(id)
 	if err != nil {
-		return domain.TagList{}, nil
+		return nil, nil
 	}
-	return tag, nil
+	return tags, nil
 }
 
 func (interactor *TagListInteractor) TagListByTagID(id uuid.UUID) (domain.TagLists, error) {

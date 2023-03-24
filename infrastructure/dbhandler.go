@@ -39,6 +39,10 @@ func (handler *DbHandler) Exec(query string, args ...interface{}) (database.Resu
 	return DbResult{result}, nil
 }
 
+func (handler *DbHandler) Get(dest interface{}, query string, args ...interface{}) error {
+	return handler.Conn.Get(dest, query, args...)
+}
+
 type DbResult struct {
 	Result sql.Result
 }

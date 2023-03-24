@@ -59,14 +59,14 @@ func (controller *TagListController) ShowByTextID(c Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	tag, err := controller.Interactor.TagListByTextID(id)
+	tags, err := controller.Interactor.TagListByTextID(id)
 	if err != nil {
 		log.Printf("Error getting tag list: %v", err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	log.Printf("Tag list: %v", tag)
-	c.JSON(http.StatusOK, tag)
+	log.Printf("Tag list: %v", tags)
+	c.JSON(http.StatusOK, tags)
 }
 
 func (controller *TagListController) ShowByTagID(c Context) {

@@ -26,12 +26,12 @@ func (interactor *UserCreateInteractor) UserCreates() (domain.UserCreates, error
 	return userCreates, nil
 }
 
-func (interactor *UserCreateInteractor) UserCreateByUserID(userID uuid.UUID) (domain.UserCreate, error) {
-	userCreate, err := interactor.UserCreateRepository.FindByUserID(userID)
+func (interactor *UserCreateInteractor) UserCreateByUserID(userID uuid.UUID) (domain.Texts, error) {
+	texts, err := interactor.UserCreateRepository.FindByUserID(userID)
 	if err != nil {
-		return domain.UserCreate{}, err
+		return nil, err
 	}
-	return userCreate, nil
+	return texts, nil
 }
 
 func (interactor *UserCreateInteractor) UserCreateByTextID(textID uuid.UUID) (domain.UserCreate, error) {
