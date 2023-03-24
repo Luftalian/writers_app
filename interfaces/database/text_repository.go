@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -26,6 +27,9 @@ func (repo *TextRepository) FindByID(id uuid.UUID) (domain.Text, error) {
 	err := repo.Select(&texts, "SELECT * FROM texts WHERE text_id = ?", id)
 	if err != nil {
 		return domain.Text{}, err
+	}
+	if len(texts) == 0 {
+		return domain.Text{}, errors.New("not found")
 	}
 	return texts[0], nil
 }

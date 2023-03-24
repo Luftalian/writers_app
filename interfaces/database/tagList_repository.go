@@ -1,6 +1,10 @@
 package database
 
 import (
+	"database/sql"
+	"errors"
+	"log"
+
 	"github.com/google/uuid"
 
 	"github.com/Luftalian/writers_app/domain"
@@ -20,12 +24,29 @@ func (repo *TagListRepository) FindAll() (domain.TagLists, error) {
 }
 
 func (repo *TagListRepository) Store(tagList domain.TagList) (domain.TagList, error) {
-	tagList.TagID = uuid.New()
-	_, err := repo.Exec("INSERT INTO tagLists (tag_id, name, text_id) VALUES (?, ?, ?)", tagList.TagID, tagList.TagName, tagList.TextID)
+	textID := tagList.TextID
+	err := repo.Get(&tagList, "SELECT * FROM tagLists WHERE name = ?", tagList.TagName)
+	if err == nil {
+		log.Printf("Same Tag Name already exists: %s", tagList.TagName)
+		_, err := repo.Exec("INSERT INTO tagLists (tag_id, name, text_id) VALUES (?, ?, ?)", tagList.TagID, tagList.TagName, textID)
+		if err != nil {
+			return domain.TagList{}, err
+		}
+		return tagList, nil
+	}
+	if err == sql.ErrNoRows {
+		log.Printf("New Tag Name: %s", tagList.TagName)
+		tagList.TagID = uuid.New()
+		_, err := repo.Exec("INSERT INTO tagLists (tag_id, name, text_id) VALUES (?, ?, ?)", tagList.TagID, tagList.TagName, tagList.TextID)
+		if err != nil {
+			return domain.TagList{}, err
+		}
+		return tagList, nil
+	}
 	if err != nil {
 		return domain.TagList{}, err
 	}
-	return tagList, nil
+	return domain.TagList{}, errors.New("Unknown Error")
 }
 
 func (repo *TagListRepository) FindByTextID(textID uuid.UUID) (domain.TagLists, error) {

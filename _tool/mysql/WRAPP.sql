@@ -45,7 +45,7 @@ CREATE TABLE `users` (
 CREATE TABLE `texts` (
   `text_id` char(36) DEFAULT NULL,
   `title` varchar(300) DEFAULT NULL,
-  `content` varchar(300) DEFAULT NULL,
+  `content` varchar(30000) DEFAULT NULL,
   `user_name` varchar(300) DEFAULT NULL,
   `user_id` char(36) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -95,16 +95,6 @@ CREATE TABLE `tagLists` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `created_at`) VALUES
-('00000000-0000-0000-0000-000000000000', '', '0000-00-00 00:00:00'),
-('00000000-0000-0000-0000-000000000000', 'testtest', '0000-00-00 00:00:00'),
-('5ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('5ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('6ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('6ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('6ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('7ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20'),
-('7ea00161-dd91-479c-614d-a80dd55732e4', 'testtest', '2023-03-18 11:43:20');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
