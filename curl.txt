@@ -4,7 +4,6 @@ curl -i -H 'Content-Type:application/json' localhost:8080/users
 
 curl -i -H 'Content-Type:application/json' localhost:8080/users/5ea00161-dd91-479c-614d-a80dd55732e4
 
-以下の条件を満たすSwaggerをyaml形式で出力してください。
 Please output Swagger in yaml format that meets the following conditions
 
 POST /api/users 要求：{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"} 返答：{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"}
@@ -35,8 +34,6 @@ DELETE /api/create/user/:id 要求：idはuuid.UUID 返答：なし
 DELETE /api/create/text/:id 要求：idはuuid.UUID 返答：なし
 POST /api/create/delete 要求：{"user_id":"4d4b711c-1ab4-4ad4-a828-5d1a5b5e5b5f","text_id":"4d4b711c-1ab4-4ad4-a828-5d1a5b5e5b60"} 返答：なし
 
-下の仕様を満たすWebアプリケーションのフロントエンドのVue.jsのページを作っください。説明はしなくていいです。
-
 仕様：文章を投稿するアプリケーション
 UserはログインするとUUIDが生成され、それをキャッシュに保存する。
 ログアウトを押すと、保存されているキャッシュを消去する。
@@ -50,7 +47,6 @@ Userは文章を投稿する際に、キャッシュされたUUIDをuser_idと�
 
 ログインしている場合、いいねをおすことができる。もし作ったひとのuser_idとブラウザキャッシュのuser_idが一致すれば、編集と削除をすることができる。
 
-バックエンドの仕様は以下のように作られている。
 バックエンドの仕様：
 1    すべてのUserの取得 GET /api/users 返答：{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"},{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"},{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"}
 5    特定のidのUserの取得 GET /api/users/:id 要求：idはuuid.UUID 返答：{"user_id": "5ea00161-dd91-479c-614d-a80dd55732e4", "name": "testtest", "created_at": "2023-03-18T02:43:20.844Z"}
@@ -122,9 +118,6 @@ DELETE /api/create/user/:id request: id is uuid.UUID reply: none
 DELETE /api/create/text/:id request: id is uuid.UUID Reply: none
 POST /api/create/delete request: {"user_id": "4d4b711c-1ab4-4ad4-a828-5d1a5b5e5b5f", "text_id": "4d4b711c-1ab4-4ad4-a828-5d1a5b5e5b60"} Reply: no
 StatusCode is always returned in the reply.
-
-
-下の仕様を満たすWebアプリケーションのフロントエンドのVue.jsのページのコードを教えてください。説明はしなくていいです。
 
 仕様：文章を投稿するアプリケーション
 URIは`/text/:text_id`
