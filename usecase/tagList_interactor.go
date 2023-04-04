@@ -1,16 +1,23 @@
 package usecase
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 
 	"github.com/Luftalian/writers_app/domain"
 )
+
+var ErrNoTagName = errors.New("tag name cannot be empty")
 
 type TagListInteractor struct {
 	TagListRepository TagListRepository
 }
 
 func (interactor *TagListInteractor) Add(t domain.TagList) (domain.TagList, error) {
+	if t.TagName == "" {
+		return domain.TagList{}, ErrNoTagName
+	}
 	tag, err := interactor.TagListRepository.Store(t)
 	if err != nil {
 		return domain.TagList{}, err
