@@ -1,13 +1,15 @@
-type: runtime
+branch:
+  main:
+    type: runtime
 
-work_dir: .
+    work_dir: .
 
-startup: |
-  go mod download
-  go build -o main
-entrypoint: ./main
-http_proxy: 8080
-https: on
-cname: 'api.writersApp.trap.games'
+    startup: |
+      go mod download
+      go build -o main
+    entrypoint: ./main
+    http_proxy: 8080
+    https: on
+    cname: 'api.writers_app.trap.games'
 
-use_mariadb: true
+    use_mariadb: true
