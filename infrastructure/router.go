@@ -24,16 +24,18 @@ func init() {
 	e.Use(session.Middleware(store))
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-        AllowOrigins: []string{"https://writersapp.trap.games"},
-        AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-        AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
-    }))
-	
+		AllowOrigins: []string{"https://writersapp.trap.games"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
+
+	uuidHandler := new(UUIDHandler)
+
 	userController := controller.NewUserController(dbHandler)
 
 	// e := e.Group("/api")
 	e.POST("/users", func(c echo.Context) error {
-		userController.Create(c)
+		userController.Create(c, uuidHandler)
 		return nil
 	})
 	e.GET("/users", func(c echo.Context) error {
@@ -41,13 +43,13 @@ func init() {
 		return nil
 	})
 	e.GET("/users/:id", func(c echo.Context) error {
-		userController.Show(c)
+		userController.Show(c, uuidHandler)
 		return nil
 	})
 
 	textController := controller.NewTextController(dbHandler)
 	e.POST("/texts", func(c echo.Context) error {
-		textController.Create(c)
+		textController.Create(c, uuidHandler)
 		return nil
 	})
 	e.GET("/texts", func(c echo.Context) error {
@@ -55,21 +57,21 @@ func init() {
 		return nil
 	})
 	e.GET("/texts/:id", func(c echo.Context) error {
-		textController.Show(c)
+		textController.Show(c, uuidHandler)
 		return nil
 	})
 	e.PUT("/texts/:id", func(c echo.Context) error {
-		textController.Change(c)
+		textController.Change(c, uuidHandler)
 		return nil
 	})
 	e.DELETE("/texts/:id", func(c echo.Context) error {
-		textController.Delete(c)
+		textController.Delete(c, uuidHandler)
 		return nil
 	})
 
 	// tagController := controller.NewTagController(dbHandler)
 	// e.POST("/tags", func(c echo.Context) error {
-	// 	tagController.Create(c)
+	// 	tagController.Create(c, uuidHandler)
 	// 	return nil
 	// })
 	// e.GET("/tags", func(c echo.Context) error {
@@ -77,13 +79,13 @@ func init() {
 	// 	return nil
 	// })
 	// e.GET("/tags/:id", func(c echo.Context) error {
-	// 	tagController.Show(c)
+	// 	tagController.Show(c, uuidHandler)
 	// 	return nil
 	// })
 
 	tagListController := controller.NewTagListController(dbHandler)
 	e.POST("/tag", func(c echo.Context) error {
-		tagListController.Create(c)
+		tagListController.Create(c, uuidHandler)
 		return nil
 	})
 	e.GET("/tag", func(c echo.Context) error {
@@ -91,23 +93,23 @@ func init() {
 		return nil
 	})
 	e.GET("/tag/text/:id", func(c echo.Context) error {
-		tagListController.ShowByTextID(c)
+		tagListController.ShowByTextID(c, uuidHandler)
 		return nil
 	})
 	e.GET("/tag/tag/:id", func(c echo.Context) error {
-        tagListController.ShowByTagID(c)
-        return nil
-    })
+		tagListController.ShowByTagID(c, uuidHandler)
+		return nil
+	})
 	e.GET("/tag/name/:tagName", func(c echo.Context) error {
 		tagListController.ShowByName(c)
-        return nil
-    })
+		return nil
+	})
 	e.PUT("/tag/:id", func(c echo.Context) error {
 		tagListController.Change(c)
 		return nil
 	})
 	e.DELETE("/tag/:id", func(c echo.Context) error {
-		tagListController.Delete(c)
+		tagListController.Delete(c, uuidHandler)
 		return nil
 	})
 
@@ -122,14 +124,14 @@ func init() {
 	})
 	e.POST("/like/check", func(c echo.Context) error {
 		userLikeController.Check(c)
-        return nil
-    })
+		return nil
+	})
 	e.GET("/like/user/:id", func(c echo.Context) error {
-		userLikeController.ShowByUserID(c)
+		userLikeController.ShowByUserID(c, uuidHandler)
 		return nil
 	})
 	e.GET("/like/text/:id", func(c echo.Context) error {
-		userLikeController.ShowByTextID(c)
+		userLikeController.ShowByTextID(c, uuidHandler)
 		return nil
 	})
 	e.PUT("/like/:id", func(c echo.Context) error {
@@ -137,11 +139,11 @@ func init() {
 		return nil
 	})
 	e.DELETE("/like/user/:id", func(c echo.Context) error {
-		userLikeController.DeleteByUserID(c)
+		userLikeController.DeleteByUserID(c, uuidHandler)
 		return nil
 	})
 	e.DELETE("/like/text/:id", func(c echo.Context) error {
-		userLikeController.DeleteByTextID(c)
+		userLikeController.DeleteByTextID(c, uuidHandler)
 		return nil
 	})
 	e.POST("/like/delete", func(c echo.Context) error {
@@ -159,11 +161,11 @@ func init() {
 		return nil
 	})
 	e.GET("/create/user/:id", func(c echo.Context) error {
-		userCreateController.ShowByUserID(c)
+		userCreateController.ShowByUserID(c, uuidHandler)
 		return nil
 	})
 	e.GET("/create/text/:id", func(c echo.Context) error {
-		userCreateController.ShowByTextID(c)
+		userCreateController.ShowByTextID(c, uuidHandler)
 		return nil
 	})
 	e.PUT("/create/:id", func(c echo.Context) error {
@@ -171,11 +173,11 @@ func init() {
 		return nil
 	})
 	e.DELETE("/create/user/:id", func(c echo.Context) error {
-		userCreateController.DeleteByUserID(c)
+		userCreateController.DeleteByUserID(c, uuidHandler)
 		return nil
 	})
 	e.DELETE("/create/text/:id", func(c echo.Context) error {
-		userCreateController.DeleteByTextID(c)
+		userCreateController.DeleteByTextID(c, uuidHandler)
 		return nil
 	})
 	e.POST("/create/delete", func(c echo.Context) error {

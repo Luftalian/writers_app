@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -26,7 +24,7 @@ func (interactor *TagInteractor) Tags() (domain.Tags, error) {
 	return tags, nil
 }
 
-func (interactor *TagInteractor) TagByID(id uuid.UUID) (domain.Tag, error) {
+func (interactor *TagInteractor) TagByID(id domain.UUID) (domain.Tag, error) {
 	tag, err := interactor.TagRepository.FindByID(id)
 	if err != nil {
 		return domain.Tag{}, nil

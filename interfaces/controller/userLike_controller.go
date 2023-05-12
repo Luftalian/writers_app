@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
 	"github.com/Luftalian/writers_app/usecase"
@@ -69,17 +67,17 @@ func (controller *UserLikeController) Check(c Context) {
 		c.JSON(http.StatusOK, checkStruct)
 		return
 	}
-    if err != nil {
-        log.Printf("Error while getting user likes: %v", err)
-        c.JSON(http.StatusInternalServerError, err)
-        return
-    }
-    log.Printf("Got user likes: %v", checkStruct)
-    c.JSON(http.StatusOK, checkStruct)
+	if err != nil {
+		log.Printf("Error while getting user likes: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	log.Printf("Got user likes: %v", checkStruct)
+	c.JSON(http.StatusOK, checkStruct)
 }
 
-func (controller *UserLikeController) ShowByUserID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserLikeController) ShowByUserID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error while parsing user id: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -95,8 +93,8 @@ func (controller *UserLikeController) ShowByUserID(c Context) {
 	c.JSON(http.StatusOK, userLike)
 }
 
-func (controller *UserLikeController) ShowByTextID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserLikeController) ShowByTextID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error while parsing user id: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -146,8 +144,8 @@ func (controller *UserLikeController) Delete(c Context) {
 	c.JSON(http.StatusOK, nil)
 }
 
-func (controller *UserLikeController) DeleteByUserID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserLikeController) DeleteByUserID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error while parsing user id: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -163,8 +161,8 @@ func (controller *UserLikeController) DeleteByUserID(c Context) {
 	c.JSON(http.StatusOK, nil)
 }
 
-func (controller *UserLikeController) DeleteByTextID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserLikeController) DeleteByTextID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error while parsing user id: %v", err)
 		c.JSON(http.StatusBadRequest, err)

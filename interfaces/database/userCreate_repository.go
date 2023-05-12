@@ -1,8 +1,6 @@
 package database
 
 import (
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -19,7 +17,7 @@ func (repo *UserCreateRepository) FindAll() (domain.UserCreates, error) {
 	return userCreates, nil
 }
 
-func (repo *UserCreateRepository) FindByUserID(userID uuid.UUID) (domain.Texts, error) {
+func (repo *UserCreateRepository) FindByUserID(userID domain.UUID) (domain.Texts, error) {
 	texts := domain.Texts{}
 	err := repo.Select(&texts, "SELECT texts.text_id, texts.title, texts.content, texts.user_name, texts.user_id, texts.created_at, texts.changed_at, texts.good_count, texts.bad_count FROM userCreates INNER JOIN texts ON userCreates.text_id = texts.text_id WHERE userCreates.user_id = ?", userID)
 	if err != nil {
@@ -28,7 +26,7 @@ func (repo *UserCreateRepository) FindByUserID(userID uuid.UUID) (domain.Texts, 
 	return texts, nil
 }
 
-func (repo *UserCreateRepository) FindByTextID(textID uuid.UUID) (domain.UserCreate, error) {
+func (repo *UserCreateRepository) FindByTextID(textID domain.UUID) (domain.UserCreate, error) {
 	userCreates := domain.UserCreates{}
 	err := repo.Select(&userCreates, "SELECT * FROM userCreates WHERE text_id = ?", textID)
 	if err != nil {
@@ -61,7 +59,7 @@ func (repo *UserCreateRepository) Delete(u domain.UserCreate) error {
 	return nil
 }
 
-func (repo *UserCreateRepository) DeleteByUserID(userID uuid.UUID) error {
+func (repo *UserCreateRepository) DeleteByUserID(userID domain.UUID) error {
 	_, err := repo.Exec("DELETE FROM userCreates WHERE user_id = ?", userID)
 	if err != nil {
 		return err
@@ -69,7 +67,7 @@ func (repo *UserCreateRepository) DeleteByUserID(userID uuid.UUID) error {
 	return nil
 }
 
-func (repo *UserCreateRepository) DeleteByTextID(textID uuid.UUID) error {
+func (repo *UserCreateRepository) DeleteByTextID(textID domain.UUID) error {
 	_, err := repo.Exec("DELETE FROM userCreates WHERE text_id = ?", textID)
 	if err != nil {
 		return err

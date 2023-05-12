@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
 	"github.com/Luftalian/writers_app/usecase"
@@ -51,8 +49,8 @@ func (controller *UserCreateController) Index(c Context) {
 	c.JSON(http.StatusOK, userCreates)
 }
 
-func (controller *UserCreateController) ShowByUserID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserCreateController) ShowByUserID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -65,8 +63,8 @@ func (controller *UserCreateController) ShowByUserID(c Context) {
 	c.JSON(http.StatusOK, userCreate)
 }
 
-func (controller *UserCreateController) ShowByTextID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserCreateController) ShowByTextID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -107,8 +105,8 @@ func (controller *UserCreateController) Delete(c Context) {
 	c.JSON(http.StatusOK, nil)
 }
 
-func (controller *UserCreateController) DeleteByUserID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserCreateController) DeleteByUserID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -121,8 +119,8 @@ func (controller *UserCreateController) DeleteByUserID(c Context) {
 	c.JSON(http.StatusOK, nil)
 }
 
-func (controller *UserCreateController) DeleteByTextID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserCreateController) DeleteByTextID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return

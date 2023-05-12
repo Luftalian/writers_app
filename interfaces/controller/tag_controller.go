@@ -7,7 +7,6 @@ import (
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
 	"github.com/Luftalian/writers_app/usecase"
-	"github.com/google/uuid"
 )
 
 type TagController struct {
@@ -24,13 +23,14 @@ func NewTagController(handler database.DbHandler) *TagController {
 	}
 }
 
-func (controller *TagController) Create(c Context) {
+func (controller *TagController) Create(c Context, u UUIDHandler) {
 	t := domain.Tag{}
 	if err := c.Bind(&t); err != nil {
 		log.Printf("Error while binding tag: %v", err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
+	t.TagID = u.New()
 	t, err := controller.Interactor.Add(t)
 	if err != nil {
 		log.Printf("Error while adding tag: %v", err)
@@ -52,8 +52,8 @@ func (controller *TagController) Index(c Context) {
 	c.JSON(http.StatusOK, tags)
 }
 
-func (controller *TagController) Show(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TagController) Show(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error while parsing id: %v", err)
 		c.JSON(http.StatusBadRequest, err)

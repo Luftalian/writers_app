@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -26,7 +24,7 @@ func (interactor *TextInteractor) Texts() (domain.Texts, error) {
 	return texts, nil
 }
 
-func (interactor *TextInteractor) TextByID(id uuid.UUID) (domain.Text, error) {
+func (interactor *TextInteractor) TextByID(id domain.UUID) (domain.Text, error) {
 	text, err := interactor.TextRepository.FindByID(id)
 	if err != nil {
 		return domain.Text{}, err
@@ -42,7 +40,7 @@ func (interactor *TextInteractor) TextChange(t domain.Text) error {
 	return nil
 }
 
-func (interactor *TextInteractor) TextDelete(id uuid.UUID) error {
+func (interactor *TextInteractor) TextDelete(id domain.UUID) error {
 	err := interactor.TextRepository.DeleteByID(id)
 	if err != nil {
 		return err

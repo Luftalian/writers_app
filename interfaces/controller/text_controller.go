@@ -3,11 +3,11 @@ package controller
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
 	"github.com/Luftalian/writers_app/usecase"
-	"github.com/google/uuid"
 )
 
 type TextController struct {
@@ -24,18 +24,23 @@ func NewTextController(handler database.DbHandler) *TextController {
 	}
 }
 
-func (controller *TextController) Create(c Context) {
+func (controller *TextController) Create(c Context, u UUIDHandler) {
 	t := domain.Text{}
 	if err := c.Bind(&t); err != nil {
 		log.Printf("Error in TextController.Create: %v", err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	// if t.TextID != uuid.Nil || t.Title == "" || t.Content == "" || t.UserID == uuid.Nil || t.UserName == "" || !t.CreatedAt.IsZero() || !t.ChangedAt.IsZero() || t.GoodCount != 0 || t.BadCount != 0 {
+	// if t.TextID != domain.Nil || t.Title == "" || t.Content == "" || t.UserID == domain.Nil || t.UserName == "" || !t.CreatedAt.IsZero() || !t.ChangedAt.IsZero() || t.GoodCount != 0 || t.BadCount != 0 {
 	// 	log.Printf("Error in TextController.Create: %v", t)
 	// 	c.JSON(http.StatusBadRequest, "Error in TextID, Title, Content, UserID, UserName, CreatedAt, UpdatedAt, GoodCount, BadCount")
 	// 	return
 	// }
+	t.TextID = u.New()
+	t.CreatedAt = time.Now()
+	t.ChangedAt = t.CreatedAt
+	t.GoodCount = 0
+	t.BadCount = 0
 	t, err := controller.Interactor.Add(t)
 	if err != nil {
 		log.Printf("Error in TextController.Create: %v", err)
@@ -57,8 +62,8 @@ func (controller *TextController) Index(c Context) {
 	c.JSON(http.StatusOK, texts)
 }
 
-func (controller *TextController) Show(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TextController) Show(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error in TextController.Show: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -74,8 +79,8 @@ func (controller *TextController) Show(c Context) {
 	c.JSON(http.StatusOK, text)
 }
 
-func (controller *TextController) Change(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TextController) Change(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error in TextController.Change: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -92,7 +97,7 @@ func (controller *TextController) Change(c Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	// if text.TextID == uuid.Nil || text.Title == "" || text.Content == "" || text.UserID == uuid.Nil || text.UserName == "" || text.CreatedAt.IsZero() {
+	// if text.TextID == domain.Nil || text.Title == "" || text.Content == "" || text.UserID == domain.Nil || text.UserName == "" || text.CreatedAt.IsZero() {
 	// 	log.Printf("Error in TextController.Change: %v", text)
 	// 	c.JSON(http.StatusBadRequest, "Error in TextID, Title, Content, UserID, UserName, CreatedAt, UpdatedAt, GoodCount, BadCount")
 	// 	return
@@ -107,14 +112,14 @@ func (controller *TextController) Change(c Context) {
 	c.JSON(http.StatusOK, text)
 }
 
-func (controller *TextController) Delete(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TextController) Delete(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error in TextController.Delete: %v", err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	if id == uuid.Nil {
+	if id == domain.Nil {
 		log.Printf("Error in TextController.Delete: %v", id)
 		c.JSON(http.StatusBadRequest, "Error in TextID")
 		return

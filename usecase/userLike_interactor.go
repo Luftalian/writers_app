@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -28,13 +26,13 @@ func (interactor *UserLikeInteractor) UserLikes() (domain.UserLikes, error) {
 
 func (interactor *UserLikeInteractor) CheckLike(u domain.UserLike) (bool, error) {
 	check, err := interactor.UserLikeRepository.CheckLikeUser(u)
-	if err!= nil {
-        return check, err
-    }
+	if err != nil {
+		return check, err
+	}
 	return check, nil
 }
 
-func (interactor *UserLikeInteractor) UserLikeByUserID(userID uuid.UUID) (domain.Texts, error) {
+func (interactor *UserLikeInteractor) UserLikeByUserID(userID domain.UUID) (domain.Texts, error) {
 	texts, err := interactor.UserLikeRepository.FindByUserID(userID)
 	if err != nil {
 		return nil, err
@@ -42,7 +40,7 @@ func (interactor *UserLikeInteractor) UserLikeByUserID(userID uuid.UUID) (domain
 	return texts, nil
 }
 
-func (interactor *UserLikeInteractor) UserLikeByTextID(textID uuid.UUID) (domain.UserLike, error) {
+func (interactor *UserLikeInteractor) UserLikeByTextID(textID domain.UUID) (domain.UserLike, error) {
 	userLike, err := interactor.UserLikeRepository.FindByTextID(textID)
 	if err != nil {
 		return domain.UserLike{}, err
@@ -66,7 +64,7 @@ func (interactor *UserLikeInteractor) Delete(u domain.UserLike) error {
 	return nil
 }
 
-func (interactor *UserLikeInteractor) DeleteByUserID(userID uuid.UUID) error {
+func (interactor *UserLikeInteractor) DeleteByUserID(userID domain.UUID) error {
 	err := interactor.UserLikeRepository.DeleteByUserID(userID)
 	if err != nil {
 		return err
@@ -74,7 +72,7 @@ func (interactor *UserLikeInteractor) DeleteByUserID(userID uuid.UUID) error {
 	return nil
 }
 
-func (interactor *UserLikeInteractor) DeleteByTextID(textID uuid.UUID) error {
+func (interactor *UserLikeInteractor) DeleteByTextID(textID domain.UUID) error {
 	err := interactor.UserLikeRepository.DeleteByTextID(textID)
 	if err != nil {
 		return err

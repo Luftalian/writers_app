@@ -5,8 +5,6 @@ import (
 	"errors"
 	"log"
 
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -49,7 +47,6 @@ func (repo *TagListRepository) Store(tagList domain.TagList) (domain.TagList, er
 	}
 	if err == sql.ErrNoRows {
 		log.Printf("New Tag Name: %s", tagList.TagName)
-		tagList.TagID = uuid.New()
 		_, err := repo.Exec("INSERT INTO tagLists (tag_id, name, text_id) VALUES (?, ?, ?)", tagList.TagID, tagList.TagName, tagList.TextID)
 		if err != nil {
 			return domain.TagList{}, err
@@ -62,7 +59,7 @@ func (repo *TagListRepository) Store(tagList domain.TagList) (domain.TagList, er
 	return domain.TagList{}, errors.New("Unknown Error")
 }
 
-func (repo *TagListRepository) FindByTextID(textID uuid.UUID) (domain.TagLists, error) {
+func (repo *TagListRepository) FindByTextID(textID domain.UUID) (domain.TagLists, error) {
 	tagLists := domain.TagLists{}
 	err := repo.Select(&tagLists, "SELECT * FROM tagLists WHERE text_id = ?", textID)
 	if err != nil {
@@ -71,7 +68,7 @@ func (repo *TagListRepository) FindByTextID(textID uuid.UUID) (domain.TagLists, 
 	return tagLists, nil
 }
 
-func (repo *TagListRepository) FindByTagID(tagID uuid.UUID) (domain.TagLists, error) {
+func (repo *TagListRepository) FindByTagID(tagID domain.UUID) (domain.TagLists, error) {
 	tagLists := domain.TagLists{}
 	err := repo.Select(&tagLists, "SELECT * FROM tagLists WHERE tag_id = ?", tagID)
 	if err != nil {
@@ -97,7 +94,7 @@ func (repo *TagListRepository) Update(tagList domain.TagList) (domain.TagList, e
 	return tagList, nil
 }
 
-func (repo *TagListRepository) Delete(tagID uuid.UUID) error {
+func (repo *TagListRepository) Delete(tagID domain.UUID) error {
 	_, err := repo.Exec("DELETE FROM tagLists WHERE tag_id = ?", tagID)
 	if err != nil {
 		return err

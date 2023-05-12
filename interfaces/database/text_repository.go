@@ -4,8 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -22,7 +20,7 @@ func (repo *TextRepository) FindAll() (domain.Texts, error) {
 	return texts, nil
 }
 
-func (repo *TextRepository) FindByID(id uuid.UUID) (domain.Text, error) {
+func (repo *TextRepository) FindByID(id domain.UUID) (domain.Text, error) {
 	texts := domain.Texts{}
 	err := repo.Select(&texts, "SELECT * FROM texts WHERE text_id = ?", id)
 	if err != nil {
@@ -35,11 +33,6 @@ func (repo *TextRepository) FindByID(id uuid.UUID) (domain.Text, error) {
 }
 
 func (repo *TextRepository) Store(text domain.Text) (domain.Text, error) {
-	text.TextID = uuid.New()
-	text.CreatedAt = time.Now()
-	text.ChangedAt = text.CreatedAt
-	text.GoodCount = 0
-	text.BadCount = 0
 	_, err := repo.Exec("INSERT INTO texts (text_id, title, content, user_name, user_id, created_at, changed_at, good_count, bad_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", text.TextID, text.Title, text.Content, text.UserName, text.UserID, text.CreatedAt, text.ChangedAt, text.GoodCount, text.BadCount)
 	if err != nil {
 		return domain.Text{}, err
@@ -56,7 +49,7 @@ func (repo *TextRepository) Update(text domain.Text) error {
 	return nil
 }
 
-func (repo *TextRepository) DeleteByID(id uuid.UUID) error {
+func (repo *TextRepository) DeleteByID(id domain.UUID) error {
 	_, err := repo.Exec("DELETE FROM texts WHERE text_id = ?", id)
 	if err != nil {
 		return err

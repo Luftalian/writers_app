@@ -3,8 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
-
-	"github.com/google/uuid"
+	"time"
 
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
@@ -25,7 +24,7 @@ func NewUserController(handler database.DbHandler) *UserController {
 	}
 }
 
-func (controller *UserController) Create(c Context) {
+func (controller *UserController) Create(c Context, uu UUIDHandler) {
 	log.Println("Create user")
 	u := domain.User{}
 	if err := c.Bind(&u); err != nil {
@@ -33,11 +32,13 @@ func (controller *UserController) Create(c Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	if u.UserID != uuid.Nil || !u.CreatedAt.IsZero() {
+	if u.UserID != domain.Nil || !u.CreatedAt.IsZero() {
 		log.Printf("UserID and CreatedAt must be empty")
 		c.JSON(http.StatusBadRequest, "UserID and CreatedAt must be empty")
 		return
 	}
+	u.UserID = uu.New()
+	u.CreatedAt = time.Now()
 	user, err := controller.Interactor.Add(u)
 	if err != nil {
 		log.Printf("Error creating user: %v", err)
@@ -60,8 +61,8 @@ func (controller *UserController) Index(c Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func (controller *UserController) Show(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *UserController) Show(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error getting user: %v", err)
 		c.JSON(http.StatusBadRequest, err)

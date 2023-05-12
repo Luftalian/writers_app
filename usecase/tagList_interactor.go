@@ -3,8 +3,6 @@ package usecase
 import (
 	"errors"
 
-	"github.com/google/uuid"
-
 	"github.com/Luftalian/writers_app/domain"
 )
 
@@ -33,7 +31,7 @@ func (interactor *TagListInteractor) TagLists() (domain.TagLists, error) {
 	return tags, nil
 }
 
-func (interactor *TagListInteractor) TagListByTextID(id uuid.UUID) (domain.TagLists, error) {
+func (interactor *TagListInteractor) TagListByTextID(id domain.UUID) (domain.TagLists, error) {
 	tags, err := interactor.TagListRepository.FindByTextID(id)
 	if err != nil {
 		return nil, nil
@@ -41,7 +39,7 @@ func (interactor *TagListInteractor) TagListByTextID(id uuid.UUID) (domain.TagLi
 	return tags, nil
 }
 
-func (interactor *TagListInteractor) TagListByTagID(id uuid.UUID) (domain.TagLists, error) {
+func (interactor *TagListInteractor) TagListByTagID(id domain.UUID) (domain.TagLists, error) {
 	tags, err := interactor.TagListRepository.FindByTagID(id)
 	if err != nil {
 		return nil, nil
@@ -51,10 +49,10 @@ func (interactor *TagListInteractor) TagListByTagID(id uuid.UUID) (domain.TagLis
 
 func (interactor *TagListInteractor) TagListByName(name string) (domain.Texts, error) {
 	texts, err := interactor.TagListRepository.FindByName(name)
-    if err!= nil {
-        return nil, nil
-    }
-    return texts, nil
+	if err != nil {
+		return nil, nil
+	}
+	return texts, nil
 }
 
 func (interactor *TagListInteractor) Update(t domain.TagList) (domain.TagList, error) {
@@ -65,7 +63,7 @@ func (interactor *TagListInteractor) Update(t domain.TagList) (domain.TagList, e
 	return tag, nil
 }
 
-func (interactor *TagListInteractor) Delete(id uuid.UUID) error {
+func (interactor *TagListInteractor) Delete(id domain.UUID) error {
 	err := interactor.TagListRepository.Delete(id)
 	if err != nil {
 		return err

@@ -7,7 +7,6 @@ import (
 	"github.com/Luftalian/writers_app/domain"
 	"github.com/Luftalian/writers_app/interfaces/database"
 	"github.com/Luftalian/writers_app/usecase"
-	"github.com/google/uuid"
 )
 
 type TagListController struct {
@@ -24,13 +23,14 @@ func NewTagListController(handler database.DbHandler) *TagListController {
 	}
 }
 
-func (controller *TagListController) Create(c Context) {
+func (controller *TagListController) Create(c Context, u UUIDHandler) {
 	t := domain.TagList{}
 	if err := c.Bind(&t); err != nil {
 		log.Printf("Error creating tag list: %v", err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
+	t.TagID = u.New()
 	t, err := controller.Interactor.Add(t)
 	if err == usecase.ErrNoTagName {
 		log.Printf("Error creating tag list: %v", err)
@@ -57,8 +57,8 @@ func (controller *TagListController) Index(c Context) {
 	c.JSON(http.StatusOK, tags)
 }
 
-func (controller *TagListController) ShowByTextID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TagListController) ShowByTextID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error parsing tag list id: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -74,34 +74,34 @@ func (controller *TagListController) ShowByTextID(c Context) {
 	c.JSON(http.StatusOK, tags)
 }
 
-func (controller *TagListController) ShowByTagID(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
-    if err!= nil {
-        log.Printf("Error parsing tag list id: %v", err)
-        c.JSON(http.StatusBadRequest, err)
-        return
-    }
-    tags, err := controller.Interactor.TagListByTagID(id)
-    if err!= nil {
-        log.Printf("Error getting tag list: %v", err)
-        c.JSON(http.StatusInternalServerError, err)
-        return
-    }
-    log.Printf("Tag list: %v", tags)
-    c.JSON(http.StatusOK, tags)
+func (controller *TagListController) ShowByTagID(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
+	if err != nil {
+		log.Printf("Error parsing tag list id: %v", err)
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	tags, err := controller.Interactor.TagListByTagID(id)
+	if err != nil {
+		log.Printf("Error getting tag list: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	log.Printf("Tag list: %v", tags)
+	c.JSON(http.StatusOK, tags)
 }
 
 func (controller *TagListController) ShowByName(c Context) {
 	name := c.Param("tagName")
-    texts, err := controller.Interactor.TagListByName(name)
-    if err!= nil {
-        log.Printf("Error getting tag list: %v", err)
-        c.JSON(http.StatusInternalServerError, err)
-        return
-    }
+	texts, err := controller.Interactor.TagListByName(name)
+	if err != nil {
+		log.Printf("Error getting tag list: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
 
-    log.Printf("Text list: %v", texts)
-    c.JSON(http.StatusOK, texts)
+	log.Printf("Text list: %v", texts)
+	c.JSON(http.StatusOK, texts)
 }
 
 func (controller *TagListController) Change(c Context) {
@@ -121,8 +121,8 @@ func (controller *TagListController) Change(c Context) {
 	c.JSON(http.StatusOK, t)
 }
 
-func (controller *TagListController) Delete(c Context) {
-	id, err := uuid.Parse(c.Param("id"))
+func (controller *TagListController) Delete(c Context, u UUIDHandler) {
+	id, err := u.Parse(c.Param("id"))
 	if err != nil {
 		log.Printf("Error parsing tag list id: %v", err)
 		c.JSON(http.StatusBadRequest, err)
@@ -136,4 +136,3 @@ func (controller *TagListController) Delete(c Context) {
 	log.Printf("Deleted tag list: %v", id)
 	c.JSON(http.StatusOK, nil)
 }
-
